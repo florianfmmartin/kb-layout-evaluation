@@ -9,8 +9,26 @@ import matplotlib.pyplot as plt
 
 
 def main():
+    # asks user
+    print("Welcome to the Keyboard Layout Evaluator & Generator:")
+    eval_or_gen = input("Do you want to [e]valuate or [g]enerate? [e/g]: ")
+
+    if eval_or_gen == "e":
+        app_evaluate()
+    elif eval_or_gen == "g":
+        app_generate()
+    else:
+        print("Bibop! I don't know what to do! Closing...")
+        quit()
+
+
+def app_evaluate():
+    """
+    Evaluates layout in config.txt.
+    This was implemented in github.com/bclnr/kb-layout-evaluation
+    """
     # load the blocks from config.txt and parse them into dataframes
-    df_layouts, df_keys, df_bigrams, df_penalties = parse_config(load_config())
+    df_layouts, df_keys, df_bigrams, df_penalties, keys, blocks = parse_config(load_config(), "e")
 
     # as some letters are not present in all layouts, they can be manually removed from the bigrams list
     letters_to_ignore = 'êàçâîôñäöüß/'
@@ -22,7 +40,7 @@ def main():
                 drop = True
         if drop:
             df_bigrams = df_bigrams.drop(row.Index)
-    
+
     # modify languages from theory to add the punctuation frequency from personal corpus
     # copy the "theory" numbers to a "no punctuation" column first
     df_bigrams['en_nopunctuation'] = df_bigrams['en']
@@ -44,36 +62,140 @@ def main():
     if 'Missing letters' in df_missing_letters:
         print('Some letters are missing from some layouts, skewing the results:')
         print(df_missing_letters)
-    
+
     # generate a dataframe of the weights per bigram per layout
     df_bigram_weight = bigram_weight(df_layouts, df_keys, df_bigrams, df_penalties)
-    
+
     # get the results
     df_results = layout_results(df_bigrams, df_bigram_weight)
-    # normalize the results based of Qwerty English = 100%
-    df_results = df_results.applymap(lambda x: round(x/df_results.at['Qwerty', 'en'] * 100, 2))
 
     # add average column with arbitrary coefs per language
-    df_results['Personal average'] = df_results.en * 0.5 + df_results.fr * 0.3 + df_results.es * 0.1 + df_results.de * 0.1
+    # my average of 30/70 en fr
+    df_results['Personal average'] = df_results.en * 0.6 + df_results.fr * 0.4
+
+    # normalize the results based of Qwerty Personnal average
+    df_results = df_results.applymap(lambda x: round(x/df_results.at['Qwerty', 'Personal average'] * 100, 2))
+    # df_results = df_results.applymap(lambda x: round(x/df_results.at['Qwerty', 'en'] * 100, 2))
 
     # sort the results
-    df_results = df_results.sort_values(by=['en'], ascending=True)
+    # df_results = df_results.sort_values(by=['en'], ascending=True)
+    df_results = df_results.sort_values(by=['Personal average'], ascending=True)
 
     # filter/reorder the results
-    # df_results = df_results[['en', 'en_nopunctuation', 'en_perso', 'fr', 'fr_nopunctuation', 'fr_perso', 'es', 'de', 'Personal average']]
-    df_results = df_results[['en', 'en_perso', 'fr', 'fr_perso', 'es', 'de']] # results_full.png
-    # df_results = df_results[['en', 'fr', 'es', 'de']] # results.png
-    # df_results = df_results[['en', 'en_nopunctuation', 'en_perso']] # results_en.png
-    # df_results = df_results[['fr', 'fr_nopunctuation', 'fr_perso']] # results_fr.png
+    df_results = df_results[['Personal average', 'en', 'en_perso', 'fr', 'fr_perso', 'es', 'de']] # results_full.png
 
     print(df_results)
-    # print results in markdown format (pandas 1.0+)
-    # print(df_results.to_markdown())
-    
-    # to plot with pandas
-    plt.style.use('ggplot') # seaborn-whitegrid or ggplot
-    df_results.plot(kind='bar', title='Grades per layout (lower is better)', figsize=(12,8), rot=45, width=0.8)
-    plt.show()
+
+
+def layout_list_to_str(name, layout_list):
+    layout_str = f">>{name}\n"
+    index = 1
+    for symbol in layout_list:
+        if index % 12 == 0:
+            layout_str += f"{symbol}\n"
+        else:
+            layout_str += f"{symbol} "
+        index += 1
+
+    layout_str += "\n"
+    return layout_str
+
+
+def app_generate():
+    """
+    Generates layout based on swapping symbols
+    from the first layout in config.txt until
+    no swap can make the ergonomic score lower.
+    """
+    # load data
+    df_layouts, df_keys, df_bigrams, df_penalties, keys, blocks = parse_config(load_config(), "g")
+
+    # as some letters are not present in all layouts, they can be manually removed from the bigrams list
+    letters_to_ignore = 'êàçâîôñäöüß/'
+    # iterate over the dataframe to remove the letters
+    for row in df_bigrams.itertuples():
+        drop = False
+        for c in letters_to_ignore:
+            if str(c) in row.Index:
+                drop = True
+        if drop:
+            df_bigrams = df_bigrams.drop(row.Index)
+
+    # modify languages from theory to add the punctuation frequency from personal corpus
+    # copy the "theory" numbers to a "no punctuation" column first
+    df_bigrams['en_nopunctuation'] = df_bigrams['en']
+    df_bigrams['fr_nopunctuation'] = df_bigrams['fr']
+    punctuation = ".,-'/"
+    for row in df_bigrams.itertuples():
+        for c in punctuation:
+            if str(c) in row.Index:
+                df_bigrams.at[row.Index, 'en'] = df_bigrams.at[row.Index, 'en_perso']
+                df_bigrams.at[row.Index, 'fr'] = df_bigrams.at[row.Index, 'fr_perso']
+
+    # normalize df_bigrams to get 100% on each column
+    df_bigrams = df_bigrams * 100 / df_bigrams.sum(axis=0)
+
+    # bests
+    best_score = 1000
+    current_score = 100
+    best_str = ""
+    current_str = ""
+    best_name = ""
+    current_name = "BEAKL 19bis"
+    times = 0
+
+    while(current_score < best_score and times < 8):
+        times += 1
+
+        # if enter the loop then best score is current_score
+        best_score = current_score
+        best_str = current_str
+        best_name = current_name
+
+        # if not first iteration
+        if current_score != 100:
+            df_layouts = create_df_layouts(keys, create_layouts_str_for_swap(best_name, blocks))
+
+        # this prints letters present in bigrams but not in a layout
+        # letters absent from a layout do not count in the grade
+        # differences between layouts skew the results
+        df_missing_letters = check_missing_letters(df_layouts, df_bigrams)
+        if 'Missing letters' in df_missing_letters:
+            print('Some letters are missing from some layouts, skewing the results:')
+            print(df_missing_letters)
+
+        # generate a dataframe of the weights per bigram per layout
+        df_bigram_weight = bigram_weight(df_layouts, df_keys, df_bigrams, df_penalties)
+
+        # get the results
+        df_results = layout_results(df_bigrams, df_bigram_weight)
+
+        # add average column with arbitrary coefs per language
+        # my average of 30/70 en fr
+        df_results['Personal average'] = df_results.en * 0.4 + df_results.fr * 0.6
+
+        # normalize the results based of Qwerty Personnal average
+        df_results = df_results.applymap(lambda x: round(x/df_results.at['Qwerty', 'Personal average'] * 100, 2))
+
+        # sort the results
+        df_results = df_results.sort_values(by=['Personal average'], ascending=True)
+
+        # filter/reorder the results
+        df_results = df_results[['Personal average']]
+
+        best_layout_name = df_results.index[0]
+        best_layout_score = df_results.to_numpy()[0][0]
+        best_layout_layout_list = df_layouts.get(best_layout_name).to_numpy()
+        best_layout_as_str = layout_list_to_str(best_layout_name, best_layout_layout_list)
+
+        current_score = best_layout_score
+        current_str = best_layout_as_str
+        current_name = best_layout_name
+        blocks = best_layout_as_str
+        print(blocks)
+
+    print(best_score)
+    print(best_str)
 
 
 def load_config():
@@ -117,7 +239,7 @@ def load_config():
     return output
 
 
-def parse_config(blocks):
+def parse_config(blocks, eval_or_gen):
     """
     Takes the list of tuples (title, block), and outputs the dataframes
     """
@@ -174,10 +296,18 @@ def parse_config(blocks):
     for i in range(len(blocks)):
         if blocks[i][0] == 'layouts':
             break
+
+    # name of first in block
+    first_layout = blocks[i][1].split(">>")[1]
+    name_block = first_layout.split("\n")[0]
+
     # create DataFrame of layouts
-    df_layouts = create_df_layouts(keys, blocks[i][1])
+    if eval_or_gen == "e":
+        df_layouts = create_df_layouts(keys, blocks[i][1])
+    else:
+        df_layouts = create_df_layouts(keys, create_layouts_str_for_swap(name_block, blocks[i][1]))
     # df_layouts is a dataframe of all predefined layouts to evaluate
-    
+
     # dataframe of bigrams by language
     df_bigrams = pd.read_csv(os.path.join(os.path.dirname(os.path.realpath('__file__')), 'stats.csv'), header=0, sep=',', index_col=0)
     # df_bigrams is a dataframe of all possible bigrams (aa, ab…) with their probability per language
@@ -189,7 +319,7 @@ def parse_config(blocks):
     df_penalties = pd.read_csv(StringIO(blocks[i][1]), sep=',', header=0, index_col=0, skipinitialspace=True)
     # df_penalties is a dataframe of the penalties to add to bigrams, by finger and row jump
 
-    return df_layouts, df_keys, df_bigrams, df_penalties
+    return df_layouts, df_keys, df_bigrams, df_penalties, keys, blocks[i][1]
 
 
 def check_missing_letters(df_layouts, df_bigrams):
@@ -221,6 +351,7 @@ def check_missing_letters(df_layouts, df_bigrams):
     
     return df_missing_letters
 
+
 def create_df_layouts(keys_list, layouts_str):
     """ Takes keys and layouts string and outputs DataFrame of layouts"""
     # cuts the text into blocks by >>
@@ -234,6 +365,68 @@ def create_df_layouts(keys_list, layouts_str):
         layouts_list.append(splitted[1].split())
     # create the dataframe
     return pd.DataFrame(list(zip(*layouts_list)), index=keys_list, columns=layouts_names)
+
+
+def create_layouts_str_for_swap(base_name, layouts_str):
+    """
+    Takes a layout and generates one string
+    containing all swap layout for create_df_layouts
+    """
+    # cuts the text into blocks by >>
+    first_layout = list(filter(None, layouts_str.split('>>')))[0]
+    # makes all swap possible
+    swap_layouts_str = make_swap_layouts(base_name, first_layout)
+    # add qwerty for comparaison
+    swap_layouts_str += """>>Qwerty
+# q w e r t y u i o p #
+é a s d f g h j k l ; '
+è z x c v b n m , . / -
+
+"""
+    return swap_layouts_str
+
+
+def make_swap_layouts(base_name, base_layout):
+    """
+    Makes all possile one swap layout from base_layout.
+    """
+    # symbols to swap
+    symbols_to_swap = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
+                       "a", "s", "d", "f", "g", "h", "j", "k", "l", "z",
+                       "x", "c", "v", "b", "n", "m", ",", ".", "'", "é"]
+
+    # base_layout extraction
+    base_layout = base_layout.split("\n")
+    base_layout = base_layout[1] + "\n" + base_layout[2] + "\n" + base_layout[3]
+
+    all_layouts = ""
+    combination_tried = []
+
+    # loop through possibility
+    for symbol_from in symbols_to_swap:
+        for symbol_to in symbols_to_swap:
+            # checks if same symbol or already swapped
+            same_symbol = symbol_from == symbol_to
+            tried = (symbol_from, symbol_to) in combination_tried or (symbol_to, symbol_from) in combination_tried
+
+            if not same_symbol and not tried:
+                # adds name
+                swap_name = f">>{base_name}, ({symbol_from}, {symbol_to})\n"
+                # adds layout
+                swap_layout = ""
+                for symbol_original in base_layout:
+                    if symbol_original == symbol_from:
+                        swap_layout += symbol_to
+                    elif symbol_original == symbol_to:
+                        swap_layout += symbol_from
+                    else:
+                        swap_layout += symbol_original
+
+                all_layouts += swap_name + swap_layout + "\n\n\n"
+                combination_tried.append((symbol_from, symbol_to))
+
+    # return all layouts found
+    return all_layouts
 
 
 def weight(bigram, layout, df_layouts, df_keys, df_penalties):

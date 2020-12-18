@@ -11,10 +11,18 @@ L21 L22 L23 L24 L25 L26 R26 R25 R24 R23 R22 R21
 L31 L32 L33 L34 L35 L36 R36 R35 R34 R33 R32 R31
 L41 L42 L43 L44 L45 L46 R46 R45 R44 R43 R42 R41
 
+/* Orginal
 [weights]
 5.0 3.6 2.4 1.8 2.2 3.5 3.5 2.2 1.8 2.4 3.6 5.0
 4.0 1.6 1.2 1.0 1.0 3.0 3.0 1.0 1.0 1.2 1.6 4.0
 5.0 3.4 2.6 2.2 1.8 4.0 4.0 1.8 2.2 2.6 3.4 5.0
+*/
+
+// BEAKL weights
+[weights]
+12.0 12.0 1.0 1.0 1.0 5.0 5.0 1.0 1.0 1.0 12.0 12.0
+5.0 5.0 0.5 0.5 0.5 1.5 1.5 0.5 0.5 0.5 5.0 5.0
+7.0 7.0 2.0 5.0 1.5 7.0 7.0 1.5 5.0 2.0 7.0 7.0
 
 /*
 Weights should:
@@ -64,6 +72,31 @@ Penalties should:
 # q w e r t y i o u p #
 é a s d f g h j k l ; '
 è z x c v b n m , . / -
+
+>>BEAKL 19bis
+# q y o u z w d n c k #
+- h i e a , g t r s p ;
+è j ' é . x v m l f b #
+
+>>BEAKL 19bis -- BEAKL SWAP
+# j p o u , v d l r z #
+- b i e a h c t s n y ;
+è ' g . é k w m q f x #
+
+>>BEAKL 19bis -- COLEMAK SWAP
+# q h o u z w p m b j #
+- l r e a . g t s n i ;
+è k v é , x ' d c f y #
+
+>>QFOUK
+# q f o u k b c p m x #
+- l r e a . g t i s n ;
+è y h ' é w z d , v j #
+
+>>AdolfsMD's
+# - v y f k b g h < ; '
+é s t i a l c e r o n ,
+è z q d m w p u x j . #
 
 >>Azerty
 è a z e r t y u i o p ^
@@ -176,12 +209,6 @@ w a u i e , c t s r n m
 - n r s t m u a e i h '
 # z c f v b , . ? ; k é
 
-// https://bepo.fr/wiki/Utilisateur:Bibidibop
->>Coeur
-# é w o p y b ' d l j z
-x a u e i , c t s r n h
-# - à è . k g m f q v #
-
 // https://geekhack.org/index.php?topic=98275.0
 >>Kaehi
 # q w l d g j u o p / é
@@ -199,12 +226,6 @@ x a u e i , c t s r n h
 é q . o u j w d n m , #
 - h a e i k g s r t p ;
 è z ' / y x b c l f v #
-
-// https://www.reddit.com/r/ErgoDoxEZ/comments/gsvpug/layout_of_the_month_beakl_15/ftcan68/?context=3
->>BEAKL 19bis
-# q y o u z w d n c k #
-- h i e a , g t r s p ;
-è j ' é . x v m l f b #
 
 // https://www.reddit.com/r/ErgoMechKeyboards/comments/j1eopm/hands_down_layout_is_ready_for_daily_use/g7bjmr7/?context=3
 >>BEAKL 19 Opt French

@@ -69,7 +69,7 @@ Penalties should:
 [layouts]
 
 >>Qwerty
-# q w e r t y i o u p #
+# q w e r t y u i o p #
 é a s d f g h j k l ; '
 è z x c v b n m , . / -
 
@@ -250,6 +250,26 @@ w a u i e , c t s r n m
 # q w d r k y u i l p #
 é a s t f g h n e o ; '
 è z x c v b j m , . / -
+
+>>Minimak-12key
+# q w d f k y u i l ; #
+é a s t r g h n e o p '
+è z x c v b j m , . / -
+
+>>Minimak-4key
+# q w d r k y u i o p #
+é a s t f g h j e l ; '
+è z x c v b n m , . / -
+
+>>Minimak-12key-RT
+# q w d f k y u i l ; #
+é a s r t g h n e o p '
+è z x c v b j m , . / -
+
+>>MiniBeaklFlo
+# q w k d f y u i l ; #
+é a s r t g h j e o p '
+è z x c v b n m , . / -
 
 // https://github.com/mw8/white_keyboard_layout
 // adapted to ergo keyboard

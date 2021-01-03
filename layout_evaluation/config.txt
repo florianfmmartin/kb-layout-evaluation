@@ -2,6 +2,7 @@
 This file can be commented by blocks or single lines using //
 Blank lines are ignored
 */
+
 /*
 Bigram frequencies in stats.csv
 */
@@ -11,18 +12,24 @@ L21 L22 L23 L24 L25 L26 R26 R25 R24 R23 R22 R21
 L31 L32 L33 L34 L35 L36 R36 R35 R34 R33 R32 R31
 L41 L42 L43 L44 L45 L46 R46 R45 R44 R43 R42 R41
 
-/* Orginal
-[weights]
+// Colemak weights
+[w_colemak]
 5.0 3.6 2.4 1.8 2.2 3.5 3.5 2.2 1.8 2.4 3.6 5.0
 4.0 1.6 1.2 1.0 1.0 3.0 3.0 1.0 1.0 1.2 1.6 4.0
 5.0 3.4 2.6 2.2 1.8 4.0 4.0 1.8 2.2 2.6 3.4 5.0
-*/
 
 // BEAKL weights
-[weights]
+[w_beakl]
 12.0 12.0 1.0 1.0 1.0 5.0 5.0 1.0 1.0 1.0 12.0 12.0
-5.0 5.0 0.5 0.5 0.5 1.5 1.5 0.5 0.5 0.5 5.0 5.0
-7.0 7.0 2.0 5.0 1.5 7.0 7.0 1.5 5.0 2.0 7.0 7.0
+5.0  5.0  0.5 0.5 0.5 1.5 1.5 0.5 0.5 0.5 5.0  5.0
+7.0  7.0  2.0 5.0 1.5 7.0 7.0 1.5 5.0 2.0 7.0  7.0
+
+// Found at http://thedarnedestthing.com/lazy%20beakl%20wi
+// The Darnest Things BEAKL
+[w_darn]
+16.0 12.0 2.0 1.0 1.0 4.0 4.0 1.0 1.0 2.0 12.0 16.0
+10.0 7.0  1.0 0.5 0.5 1.5 1.5 0.5 0.5 1.0 7.0  10.0
+9.0  5.0  2.5 2.0 1.5 5.0 5.0 1.5 2.0 2.5 5.0  9.0
 
 /*
 Weights should:
@@ -68,31 +75,71 @@ Penalties should:
 
 [layouts]
 
+/*
+I added a few layout from the internet and some that I generated.
+DARN, COLE and ROLL refer to the type of weights chose for the generation.
+ROLL means no weights and only penalties.
+*/
+
 >>Qwerty
 # q w e r t y u i o p #
 é a s d f g h j k l ; '
 è z x c v b n m , . / -
 
->>BEAKL 19bis
-# q y o u z w d n c k #
-- h i e a , g t r s p ;
-è j ' é . x v m l f b #
+// Qwerty -- DARN 50/50 EN/FR 12 key
+>>MiniDARN12
+# q w l d f y u i o x #
+é k s r t g h n a e ; '
+è z p c v b j m , . / -
 
->>BEAKL 19bis -- BEAKL SWAP
-# j p o u , v d l r z #
-- b i e a h c t s n y ;
-è ' g . é k w m q f x #
-
->>BEAKL 19bis -- COLEMAK SWAP
-# q h o u z w p m b j #
-- l r e a . g t s n i ;
-è k v é , x ' d c f y #
-
+// Can't remember how this was generated
 >>QFOUK
-# q f o u k b c p m x #
+è q f o u k b c p m x #
 - l r e a . g t i s n ;
-è y h ' é w z d , v j #
+é y h ' / w z d , v j #
 
+// QFOUK -- ROLL 100 FR
+>>QFOUK-ROLL
+è k h o , y b g p m x #
+- l r e a u d t i s n ;
+é q ' / . w f v j c z #
+
+// https://mathematicalmulticore.wordpress.com/the-keyboard-layout-project/
+>>MTGAP
+# y p o u j k d l c w #
+é i n e a , m h t s r '
+è q z / . : b f g v x -
+
+// https://geekhack.org/index.php?topic=67604.0
+>>Oneproduct
+# p l d w g j x o y q è
+- n r s t m u a e i h '
+# z c f v b , . ? ; k é
+
+>>BEAKL 19bis
+é q y o u z w d n c k #
+- h i e a , g t r s p ;
+è j ' / . x v m l f b #
+
+// Handmade and really bad
+>>MiniBEAKL19bis-12
+è q w o u j y k l d ; #
+- a i e f g h t r s p '
+é z x c v b n m , . / #
+
+// http://mtgap.bilfo.com/official_keyboard.html
+// http://mtgap.bilfo.com/completed_keyboard.html
+>>MTGAP 2.0
+# , f h d k j c u l . #
+é o a n t g m s e r i -
+è q x b p z y w ' v ; #
+
+>>Workman
+# q d r w b j f u p ; #
+é a s h t g y n e o i '
+è z x m c v k l , . / -
+
+// Found at https://www.reddit.com/r/KeyboardLayouts/comments/kfkw1z/i_spent_about_6_hours_coming_up_with_a_layout/
 >>AdolfsMD's
 # - v y f k b g h < ; '
 é s t i a l c e r o n ,
@@ -129,6 +176,12 @@ w a u i e , c t s r n m
 é a r s t d h n e i o '
 è z x c v b k m , . / -
 
+// Generated
+>>Colemak COLE
+# q w f p g j l u y ; #
+é a r s t v m n e i o '
+è z b c d x k h , . / -
+
 >>Colemak DH
 # q w f p b j l u y ; #
 é a r s t g k n e i o '
@@ -144,10 +197,11 @@ w a u i e , c t s r n m
 # a r s t g m n e i o -
 # z x c d v k h , . ' /
 
->>Workman
-# q d r w b j f u p ; #
-é a s h t g y n e o i '
-è z x m c v k l , . / -
+// Generated
+>>Colemak DARN
+# q w a p g j l u y ; #
+é x r s t d h n e i , '
+è z f c v b k m o . / -
 
 >>Norman
 # q w d f k j u r l ; #
@@ -170,19 +224,6 @@ w a u i e , c t s r n m
 è d s t n r i a e o h '
 # z x c v j k p , . / -
 
-// https://mathematicalmulticore.wordpress.com/the-keyboard-layout-project/
->>MTGAP
-# y p o u j k d l c w #
-é i n e a , m h t s r '
-è q z / . : b f g v x -
-
-// http://mtgap.bilfo.com/official_keyboard.html
-// http://mtgap.bilfo.com/completed_keyboard.html
->>MTGAP 2.0
-# , f h d k j c u l . #
-é o a n t g m s e r i -
-è q x b p z y w ' v ; #
-
 >>MTGAP "Easy"
 # q w l d b j f u k p #
 é a s r t g h n e o i -
@@ -203,12 +244,6 @@ w a u i e , c t s r n m
 é i a e t p l n s r o -
 è ' , y g z - m b v x #
 
-// https://geekhack.org/index.php?topic=67604.0
->>Oneproduct
-# p l d w g j x o y q è
-- n r s t m u a e i h '
-# z c f v b , . ? ; k é
-
 // https://geekhack.org/index.php?topic=98275.0
 >>Kaehi
 # q w l d g j u o p / é
@@ -227,11 +262,55 @@ w a u i e , c t s r n m
 - h a e i k g s r t p ;
 è z ' / y x b c l f v #
 
+// Generated
+>>BEAKL 19bis DARN
+é q y o u k w d n c z #
+- ' i e a p g t r s , ;
+è j h / . x v m l f b #
+
 // https://www.reddit.com/r/ErgoMechKeyboards/comments/j1eopm/hands_down_layout_is_ready_for_daily_use/g7bjmr7/?context=3
 >>BEAKL 19 Opt French
 # w m r d v y u o q x #
 # g s n t p , i e a h -
 # k f l c b j é ' . z è
+
+// Handmade inbetween of 19 Opt French and 9
+// Good score in 50/50 EN/FR
+>>BEAKL 19OF+9
+# j h o u k g c r f z #
+# q a e i y d t n s b -
+# é , ' . x w m l p v è
+
+>>BEAKL 9
+é j h o u k g c r f z #
+- q i e a y d s t n b ;
+è / , ' . x w m l p v #
+
+// https://deskthority.net/wiki/BEAKL
+>>BEAKL 10
+é q h o u x g d n m v #
+- y i e a . c s r t w ;
+è j / ' , z b p l f k #
+
+>>BEAKL 8
+é q y o u x g c r f z #
+- k h e a . d s t n b ;
+è j / ' i , w m l p v #
+
+>>BEAKL 7
+é j h a u , g m r p z #
+- q o e i y d s t n b ;
+è / k ' . x w c l f v #
+
+>>BEAKL EZ
+é q y o u k f g r c v #
+- h i e a , l s t n w ;
+è / ' j . x b d m p z #
+
+>>BEAKL Manual Balanced
+z ; , u p - f l c . ' #
+# o a e i d r h t n s #
+j k è y g b v m w é x q
 
 // http://millikeys.sourceforge.net/asset/
 >>ASSET
@@ -261,15 +340,12 @@ w a u i e , c t s r n m
 é a s t f g h j e l ; '
 è z x c v b n m , . / -
 
+// RT swap to ressemble QWERTY MORE
+// Scores better than OG...
 >>Minimak-12key-RT
 # q w d f k y u i l ; #
 é a s r t g h n e o p '
 è z x c v b j m , . / -
-
->>MiniBeaklFlo
-# q w k d f y u i l ; #
-é a s r t g h j e o p '
-è z x c v b n m , . / -
 
 // https://github.com/mw8/white_keyboard_layout
 // adapted to ergo keyboard
@@ -307,3 +383,8 @@ w a u i e , c t s r n m
 # q w u d p j f y l ; #
 é a s e t g h n i r o '
 è b z x c v k m , . / -
+
+>>Workman DARN
+# q d r a b j f u p ; #
+é w s i t g y n e o , '
+è z x m c v k l h . / -

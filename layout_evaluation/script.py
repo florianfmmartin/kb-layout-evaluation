@@ -29,7 +29,7 @@ Yours: """).split(" ")
     weight_name = "w_" + input("Name of weights to use [colemak/beakl/darn]: ")
 
     if eval_or_gen == "e":
-        top_show = int(input("Show top [x] results: "))
+        top_show = int(input("Show top [x] results (0 for all): "))
         print()
         app_evaluate(langs_dict, top_show, weight_name)
     elif eval_or_gen == "g":
@@ -127,7 +127,10 @@ def app_evaluate(langs_dict, top_show, weight_name):
     # filter/reorder the results
     df_results = df_results[['Personal average', 'en', 'fr', 'es', 'de']]
 
-    print(df_results.iloc[:top_show])
+    if top_show != 0:
+        print(df_results.iloc[:top_show])
+    else:
+        print(df_results)
 
 
 def app_generate(langs_dict, weight_name):

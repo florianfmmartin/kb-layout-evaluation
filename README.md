@@ -20,7 +20,7 @@ Here is a list of features I added with it's description and way to modify it.
 The generation is quite simple and really not optimal, but you can still make some great layouts with it. It starts from the base layout and makes a big list of layout one swap away from itself and takes the one with the best score to continue iterating until the best layout from epoch _n+1_ can't beat the one from epocn _n_.
 
 ## Layouts
-I added some layouts from the web and from the ones I generated
+I added a few layout from the internet and some that I generated. For the ones I generated DARN, COLE and ROLL refer to the type of weights chose for the generation. ROLL means no weights and only penalties. This was done by changing the return value of the _weights_ function for it to return only the variable _penalty_. They were for the most part generated for 50/50 en/fr so it might not fit your needs.
 
 ## Contribution
 I am fully open to contribution. Modification to the script and to the config by adding layouts or weights are more than welcomed :)

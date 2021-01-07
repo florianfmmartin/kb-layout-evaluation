@@ -202,6 +202,14 @@ Penalties should:
 è j , . k ' b p l f v #
 # # # # i # # # # # # #
 
+// BEAKL Wi-x, (e, a), (g, k), (y, g), (k, b), (w, f), (u, f), (l, m), (j, k), (j, v), (j, x), (g, b)
+// Swap with w_thumb, en 100%
+>>BEAKL Wi-x SWAP
+# : b o f - g d n l j #
+é q h a e u c t r s z #
+è k , . y ' v p m w x #
+# # # # i # # # # # # #
+
 >>Qwerty
 # q w e r t y i o u p #
 é a s d f g h j k l ; '

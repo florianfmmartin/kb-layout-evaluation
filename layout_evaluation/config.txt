@@ -166,6 +166,12 @@ ROLL means no weights and only penalties.
 w a u i e , c t s r n m
 - à y x . k ' q g h f ç
 
+// github.com/qmk_firmware/keyboards/minidox/keymaps/bepo
+>>Bepo minidox
+è b w p o ' ; v d l j #
+- a u i e . c t s r n #
+é z y x , k m q g h f /
+
 >>Dvorak
 - ' , . p y f g c r l #
 é a o e u i d h t n s #
@@ -186,6 +192,11 @@ w a u i e , c t s r n m
 # q w f p b j l u y ; #
 é a r s t g k n e i o '
 è z x c d v m h , . / -
+
+>>Miryoku
+è q w f p b j l u y ' #
+- a r s t g m n e i o #
+é z x c d v k h , . / #
 
 >>Colemak DHm
 # q w f p b j l u y ; #
@@ -277,8 +288,8 @@ w a u i e , c t s r n m
 // Handmade inbetween of 19 Opt French and 9
 // Good score in 50/50 EN/FR
 >>BEAKL 19OF+9
-# j h o u k g c r f z #
-# q a e i y d t n s b -
+# j h o u k y c r f z #
+# q a e i g d t n s b -
 # é , ' . x w m l p v è
 
 >>BEAKL 9
@@ -394,3 +405,9 @@ j k è y g b v m w é x q
 # k m l u ? v d r ' q #
 é a t h e . c s n o i -
 è z p f j , b g w x y /
+
+// qmk minidox rsthd combos
+// as e on thumb so this is not a good evaluator for it
+è j c y f k z l , u q #
+- r s t h d m n a i o #
+é v g p b x w . ; - e #

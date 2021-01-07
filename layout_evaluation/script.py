@@ -11,6 +11,10 @@ def main():
     # asks user
     print("Welcome to the Keyboard Layout Evaluator & Generator:")
     eval_or_gen = input("Do you want to [e]valuate or [g]enerate? [e/g]: ")
+    thumb_row = input("Do you want the thumb row to be evaluated? [y/n]: ")
+
+    if thumb_row not in ["y", "n"]:
+        exit()
 
     langs = input("""For what languages do you want to generate a layout?
 Ex. with all: en fr es de
@@ -31,22 +35,22 @@ Yours: """).split(" ")
     if eval_or_gen == "e":
         top_show = int(input("Show top [x] results (0 for all): "))
         print()
-        app_evaluate(langs_dict, top_show, weight_name)
+        app_evaluate(langs_dict, top_show, weight_name, thumb_row)
     elif eval_or_gen == "g":
-        app_generate(langs_dict, weight_name)
+        app_generate(langs_dict, weight_name, thumb_row)
     else:
         print("Bibop! I don't know what to do! Closing...")
-        quit()
+        exit()
 
 
-def app_evaluate(langs_dict, top_show, weight_name):
+def app_evaluate(langs_dict, top_show, weight_name, thumb_row):
     """
     Evaluates layout in config.txt.
     This was implemented in github.com/bclnr/kb-layout-evaluation
     """
     # load the blocks from config.txt and parse them into dataframes
     df_layouts, df_keys, df_bigrams, df_penalties, keys, blocks = parse_config(
-                                                                    load_config(weight_name), "e")
+                                                                    load_config(weight_name, thumb_row), "e", thumb_row)
 
     # as some letters are not present in all layouts, they can be manually removed from the bigrams list
     letters_to_ignore = 'êàçâîôñäöüß/'
@@ -133,7 +137,7 @@ def app_evaluate(langs_dict, top_show, weight_name):
         print(df_results)
 
 
-def app_generate(langs_dict, weight_name):
+def app_generate(langs_dict, weight_name, thumb_row):
     """
     Generates layout based on swapping symbols
     from the first layout in config.txt until
@@ -141,7 +145,7 @@ def app_generate(langs_dict, weight_name):
     """
     # load data
     df_layouts, df_keys, df_bigrams, df_penalties, keys, blocks = parse_config(
-        load_config(weight_name), "g")
+        load_config(weight_name, thumb_row), "g", thumb_row)
 
     # as some letters are not present in all layouts, they can be manually removed from the bigrams list
     letters_to_ignore = 'êàçâîôñäöüß/'
@@ -274,14 +278,18 @@ def layout_list_to_str(name, layout_list):
     return layout_str
 
 
-def load_config(weight_name):
+def load_config(weight_name, thumb_row):
     """
     Load the config file and outputs its content as a list of tuples (title, block)
     """
 
     # load the whole file into a str
-    filepath = os.path.join(os.path.dirname(
-        os.path.realpath('__file__')), 'config.txt')
+    if thumb_row == "y":
+        filepath = os.path.join(os.path.dirname(
+            os.path.realpath('__file__')), 'config_thumb.txt')
+    else:
+        filepath = os.path.join(os.path.dirname(
+            os.path.realpath('__file__')), 'config.txt')
     filehandle = open(filepath)
     filetext = filehandle.read()
 
@@ -328,7 +336,7 @@ def load_config(weight_name):
     return output_w
 
 
-def parse_config(blocks, eval_or_gen):
+def parse_config(blocks, eval_or_gen, thumb_row):
     """
     Takes the list of tuples (title, block), and outputs the dataframes
     """
@@ -340,7 +348,7 @@ def parse_config(blocks, eval_or_gen):
         blocks_available.append(t[0])
     for t in blocks_needed:
         if t not in blocks_available:
-            print('Missing block from config file: ' + t)
+            print('Config file error for ' + t)
             sys.exit()
 
     # find the location of the keys in the blocks list
@@ -364,6 +372,9 @@ def parse_config(blocks, eval_or_gen):
     df_keys['keyrow'] = None
     # assign a letter per key corresponding to which finger is used
     for row in df_keys.itertuples():
+        if thumb_row == "y":
+            if int(row.Index[2:]) >= 7:                # -> thumb row <-
+                df_keys.at[row.Index, 'finger'] = 't'  # -> thumb row <-
         # pinky
         if int(row.Index[2:]) <= 2:
             df_keys.at[row.Index, 'finger'] = 'p'
@@ -486,8 +497,8 @@ def make_swap_layouts(base_name, base_layout):
     """
     # symbols to swap
     symbols_to_swap = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
-                       "a", "s", "d", "f", "g", "h", "j", "k", "l", "z",
-                       "x", "c", "v", "b", "n", "m"]
+                       "a", "s", "d", "f", "g", "h", "j", "k", "l", ";",
+                       "z", "x", "c", "v", "b", "n", "m"]
 
     # base_layout extraction
     base_layout = base_layout.split("\n")
@@ -555,12 +566,15 @@ def weight(bigram, layout, df_layouts, df_keys, df_penalties):
             rowjump = "row_jump1"
         elif(abs(keyrow1 - keyrow2) == 2):
             rowjump = "row_jump2"
+        elif(abs(keyrow1 - keyrow2) == 3):  # -> thumb row <-
+            rowjump = "row_jump3"           # -> thumb row <-
         else:
             sys.exit('Penalty for line jump not defined')
 
         penalty = df_penalties.at[finger1 + finger2, rowjump]
 
     return weight1 + weight2 + penalty
+    # return penalty
 
 
 def bigram_weight(df_layouts, df_keys, df_bigrams, df_penalties):

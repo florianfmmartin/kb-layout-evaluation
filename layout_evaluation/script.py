@@ -180,7 +180,7 @@ def app_generate(langs_dict, weight_name, thumb_row):
     best_str = ""
     current_str = ""
     best_name = ""
-    current_name = "Qwerty"
+    current_name = "Beakl Wi-x"
     times = 0
     limit = 4
 
@@ -196,7 +196,7 @@ def app_generate(langs_dict, weight_name, thumb_row):
         # if not first iteration
         if current_score != 100:
             df_layouts = create_df_layouts(
-                keys, create_layouts_str_for_swap(best_name, blocks))
+                keys, create_layouts_str_for_swap(best_name, blocks, thumb_row))
 
         # this prints letters present in bigrams but not in a layout
         # letters absent from a layout do not count in the grade
@@ -406,7 +406,7 @@ def parse_config(blocks, eval_or_gen, thumb_row):
         df_layouts = create_df_layouts(keys, blocks[i][1])
     else:
         df_layouts = create_df_layouts(
-            keys, create_layouts_str_for_swap(name_block, blocks[i][1]))
+            keys, create_layouts_str_for_swap(name_block, blocks[i][1], thumb_row))
     # df_layouts is a dataframe of all predefined layouts to evaluate
 
     # dataframe of bigrams by language
@@ -472,7 +472,7 @@ def create_df_layouts(keys_list, layouts_str):
     return pd.DataFrame(list(zip(*layouts_list)), index=keys_list, columns=layouts_names)
 
 
-def create_layouts_str_for_swap(base_name, layouts_str):
+def create_layouts_str_for_swap(base_name, layouts_str, thumb_row):
     """
     Takes a layout and generates one string
     containing all swap layout for create_df_layouts
@@ -480,9 +480,18 @@ def create_layouts_str_for_swap(base_name, layouts_str):
     # cuts the text into blocks by >>
     first_layout = list(filter(None, layouts_str.split('>>')))[0]
     # makes all swap possible
-    swap_layouts_str = make_swap_layouts(base_name, first_layout)
+    swap_layouts_str = make_swap_layouts(base_name, first_layout, thumb_row)
     # add qwerty for comparaison
-    swap_layouts_str += """>>Qwerty
+    if thumb_row == "y":
+        swap_layouts_str += """>>Qwerty
+# q w e r t y u i o p #
+é a s d f g h j k l ; '
+è z x c v b n m , . / -
+# # # # # # # # # # # #
+
+"""
+    else:
+        swap_layouts_str += """>>Qwerty
 # q w e r t y u i o p #
 é a s d f g h j k l ; '
 è z x c v b n m , . / -
@@ -491,19 +500,27 @@ def create_layouts_str_for_swap(base_name, layouts_str):
     return swap_layouts_str
 
 
-def make_swap_layouts(base_name, base_layout):
+def make_swap_layouts(base_name, base_layout, thumb_row):
     """
     Makes all possile one swap layout from base_layout.
     """
     # symbols to swap
+    # you may add ; as a symbol
+    # but it produces errors i can't explain
     symbols_to_swap = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
-                       "a", "s", "d", "f", "g", "h", "j", "k", "l", ";",
+                       "a", "s", "d", "f", "g", "h", "j", "k", "l",
                        "z", "x", "c", "v", "b", "n", "m"]
 
     # base_layout extraction
     base_layout = base_layout.split("\n")
-    base_layout = base_layout[1] + "\n" + \
-        base_layout[2] + "\n" + base_layout[3]
+    if thumb_row == "y":
+        base_layout = base_layout[1] + "\n" + \
+                      base_layout[2] + "\n" + \
+                      base_layout[3] + "\n" + \
+                      base_layout[4]
+    else:
+        base_layout = base_layout[1] + "\n" + \
+            base_layout[2] + "\n" + base_layout[3]
 
     all_layouts = ""
     combination_tried = []

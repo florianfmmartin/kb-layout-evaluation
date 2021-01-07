@@ -195,6 +195,13 @@ Penalties should:
 
 [layouts]
 
+// http://thedarnedestthing:8000/corne
+>>BEAKL Wi-x
+# : y o u - g d n m x #
+é q h e a w c t r s z #
+è j , . k ' b p l f v #
+# # # # i # # # # # # #
+
 >>Qwerty
 # q w e r t y i o u p #
 é a s d f g h j k l ; '
@@ -464,13 +471,6 @@ x a u e i , c t s r n h
 >>BEAKL Wi-v
 # : y o u - g d n m z #
 é q h e a w c t r s x #
-è j , . k ' b p l f v #
-# # # # i # # # # # # #
-
-// http://thedarnedestthing:8000/corne
->>BEAKL Wi-x
-# : y o u - g d n m x #
-é q h e a w c t r s z #
 è j , . k ' b p l f v #
 # # # # i # # # # # # #
 

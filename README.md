@@ -15,6 +15,10 @@ Here is a list of features I added with it's description and way to modify it.
     - To modify from what layout the generation will happen you need to do so (for now, I hope to make the layout promptable in the near future):
         - Put the layout first in the config
         - Change the name of the variable _current\_name_ before the while loop in the _app\_generate_ function
+- Added thumb row evaluation thanks to u/sdothum on reddit
+    - Thumb evaluation is done with a different config_thumb.txt
+    - Generation in yet to be tested/ameliorated
+        - Base layout that do not contain any letters on the thumb row won't make one appear
 
 ## The Generation
 The generation is quite simple and really not optimal, but you can still make some great layouts with it. It starts from the base layout and makes a big list of layout one swap away from itself and takes the one with the best score to continue iterating until the best layout from epoch _n+1_ can't beat the one from epocn _n_.

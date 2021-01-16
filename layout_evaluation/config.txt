@@ -172,6 +172,11 @@ w a u i e , c t s r n m
 - a u i e . c t s r n #
 é z y x , k m q g h f /
 
+>>Bpo flo
+# b é p o v d l j z m #
+é a u i e , c t s r n ;
+è y x . k ' q g h f w -
+
 >>Dvorak
 - ' , . p y f g c r l #
 é a o e u i d h t n s #
@@ -292,6 +297,11 @@ w a u i e , c t s r n m
 # q a e i g d t n s b -
 # é , ' . x w m l p v è
 
+>>BEAKL 19OF+9 bottom row left modif
+# j h o u k y c r f z #
+# q a e i g d t n s b -
+# x é , ' . w m l p v è
+
 >>BEAKL 9
 é j h o u k g c r f z #
 - q i e a y d s t n b ;
@@ -408,6 +418,7 @@ j k è y g b v m w é x q
 
 // qmk minidox rsthd combos
 // as e on thumb so this is not a good evaluator for it
+>>What is this
 è j c y f k z l , u q #
-- r s t h d m n a i o #
+- r s t h d m n a i o '
 é v g p b x w . ; - e #

@@ -292,14 +292,14 @@ w a u i e , c t s r n m
 
 // Handmade inbetween of 19 Opt French and 9
 // Good score in 50/50 EN/FR
->>BEAKL 19OF+9
-# j h o u k y c r f z #
-# q a e i g d t n s b -
-# é , ' . x w m l p v è
+>>Florian
+# j h o u y v c r f z #
+# q a e i g d t n s k -
+# x é , ' . w m l p b è
 
->>BEAKL 19OF+9 bottom row left modif
-# j h o u k y c r f z #
-# q a e i g d t n s b -
+>>Test flo darn 9
+# j h o u k g c r f z #
+# q a e i y d t n s b -
 # x é , ' . w m l p v è
 
 >>BEAKL 9
@@ -307,6 +307,7 @@ w a u i e , c t s r n m
 - q i e a y d s t n b ;
 è / , ' . x w m l p v #
 
+/* To much layouts
 // https://deskthority.net/wiki/BEAKL
 >>BEAKL 10
 é q h o u x g d n m v #
@@ -327,6 +328,7 @@ w a u i e , c t s r n m
 é q y o u k f g r c v #
 - h i e a , l s t n w ;
 è / ' j . x b d m p z #
+
 
 >>BEAKL Manual Balanced
 z ; , u p - f l c . ' #
@@ -422,3 +424,4 @@ j k è y g b v m w é x q
 è j c y f k z l , u q #
 - r s t h d m n a i o '
 é v g p b x w . ; - e #
+*/

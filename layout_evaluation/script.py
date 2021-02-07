@@ -180,7 +180,7 @@ def app_generate(langs_dict, weight_name, thumb_row):
     best_str = ""
     current_str = ""
     best_name = ""
-    current_name = "Beakl Wi-x"
+    current_name = "floopt"
     times = 0
     limit = 4
 
